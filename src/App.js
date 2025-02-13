@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Form from './components/Form'
 import MemoryCard from './components/MemoryCard'
 
