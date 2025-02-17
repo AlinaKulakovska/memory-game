@@ -1,25 +1,32 @@
+import { decodeEntity } from 'html-entities'
+
 export default function EmojiButton({
-    content,
+    emoji,
     handleClick,
     selectedCardEntry,
-    matchedCardEntry
+    matchedCardEntry,
+    index
 }) {
     
-    const btnContent = selectedCardEntry || matchedCardEntry ? content : "?"
-
-    /**
-     * When you're done, there should be hover/focus effects (box-shadow and background-color) on cards lying face-down, animation when cards are turned, and greyed out background on matched cards.
-     */
+    const btnContent = selectedCardEntry || matchedCardEntry ? decodeEntity(emoji.htmlCode[0]) : "?"
     
     const btnStyle =
         matchedCardEntry ? "btn--emoji__back--matched" :
         selectedCardEntry ? "btn--emoji__back--selected" :
         "btn--emoji__front"
+        
+    const btnAria =
+        matchedCardEntry ? `${decodeEntity(emoji.name)}. Matched.` :
+        selectedCardEntry ? `${decodeEntity(emoji.name)}. Not matched yet.` :
+        "Card upside down."
  
     return (
         <button
             className={`btn btn--emoji ${btnStyle}`}
-            onClick={handleClick}
+            onClick={selectedCardEntry ? null : handleClick}
+            disabled={matchedCardEntry}
+            aria-label={`Position ${index + 1}: ${btnAria}`}
+            aria-live="polite"
         >
             {btnContent}
         </button>
